@@ -1,10 +1,14 @@
 package me.springstudy.jpastudy.user;
 
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+
 
 @Entity
 public class User {
@@ -19,6 +23,12 @@ public class User {
 
 	@Column(length = 25)
 	private String password;
+
+	@Embedded
+	@AttributeOverrides({
+		@AttributeOverride(name = "street", column = @Column(name = "home_street"))
+	}) // Address에 있는 "street" 값을 여기서는 "home_street" 로 저장하겠다.
+	private Address address;
 
 
 }
