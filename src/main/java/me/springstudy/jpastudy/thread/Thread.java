@@ -1,38 +1,29 @@
-package me.springstudy.jpastudy.channel;
+package me.springstudy.jpastudy.thread;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-import me.springstudy.jpastudy.thread.Thread;
+import me.springstudy.jpastudy.channel.Channel;
 
 @Entity
-@Table(name = "TB_CHANNEL")
-public class Channel {
-	/**
-	 * 컬럼 - 연관관계 컬럼을 제외한 컬럼을 정의합니다.
-	 */
+@Table(name = "TB_THREAD")
+public class Thread {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", nullable = false)
 	private Long id;
 
-	private String name;
-
-	@Enumerated(EnumType.STRING)
-	private Type type;
-
-	public enum Type {
-		PUBLIC, PRIVATE;
-	}
+	/**
+	 * 컬럼 - 연관관계 컬럼을 제외한 컬럼을 정의합니다.
+	 */
+	@Column(length = 500)
+	private String message;
 
 	/**
 	 * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
@@ -42,8 +33,10 @@ public class Channel {
 	/**
 	 * 연관관계 - Foreign Key 값을 따로 컬럼으로 정의하지 않고 연관 관계로 정의합니다.
 	 */
-	@OneToMany(mappedBy = "channel")
-	private Set<Thread> threads = new LinkedHashSet<>();
+	@ManyToOne
+	@JoinColumn(name = "channel_id")
+	private Channel channel;
+
 
 	/**
 	 * 연관관계 편의 메소드 - 반대쪽에는 연관관계 편의 메소드가 없도록 주의합니다.
