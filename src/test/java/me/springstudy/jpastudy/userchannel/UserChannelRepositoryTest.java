@@ -1,10 +1,7 @@
 package me.springstudy.jpastudy.userchannel;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import me.springstudy.jpastudy.channel.Channel;
 import me.springstudy.jpastudy.channel.ChannelRepository;
-import me.springstudy.jpastudy.thread.ThreadRepository;
 import me.springstudy.jpastudy.user.User;
 import me.springstudy.jpastudy.user.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -38,6 +35,25 @@ class UserChannelRepositoryTest {
 		Channel savedChannel = channelRepository.insertChannel(newChannel);
 		User savedUser = userRepository.insertUser(newUser);
 		UserChannel savedUserChannel = userChannelRepository.insertUserChannel(newUserChannel);
+
+		// then
+		Channel foundChaneel = channelRepository.selectChannel(savedChannel.getId());
+		assert foundChaneel.getUserChannels().stream()
+			.map(UserChannel::getChannel)
+			.map(Channel::getName)
+			.anyMatch(name -> name.equals(newChannel.getName()));
+	}
+
+	@Test
+	void userJoinChannelWithCascadeTest() {
+		// given
+		Channel newChannel = Channel.builder().name("new-channel").build();
+		User newUser = User.builder().username("new-user").password("new-pass").build();
+		newChannel.joinUser(newUser);
+
+		// when
+		Channel savedChannel = channelRepository.insertChannel(newChannel);
+		User savedUser = userRepository.insertUser(newUser);
 
 		// then
 		Channel foundChaneel = channelRepository.selectChannel(savedChannel.getId());

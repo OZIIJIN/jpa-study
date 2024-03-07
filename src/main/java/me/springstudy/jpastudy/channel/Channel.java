@@ -1,5 +1,6 @@
 package me.springstudy.jpastudy.channel;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -62,7 +63,7 @@ public class Channel {
 	@OneToMany(mappedBy = "channel")
 	private Set<Thread> threads = new LinkedHashSet<>();
 
-	@OneToMany(mappedBy = "channel")
+	@OneToMany(mappedBy = "channel", cascade = CascadeType.ALL)
 	private Set<UserChannel> userChannels = new LinkedHashSet<>();
 
 	/**
