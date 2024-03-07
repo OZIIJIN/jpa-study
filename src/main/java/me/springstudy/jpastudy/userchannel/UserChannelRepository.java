@@ -16,7 +16,7 @@ public class UserChannelRepository {
 		return userchannel;
 	}
 
-	public Channel selectUserChannel (Long id) {
-		return entityManager.find(Channel.class, id);
+	public UserChannel selectUserChannel (Long id) {
+		return entityManager.find(UserChannel.class, id);
 	}
 }
