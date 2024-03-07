@@ -9,6 +9,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.springstudy.jpastudy.channel.Channel;
@@ -36,7 +37,10 @@ public class Thread {
 	/**
 	 * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
 	 */
-
+	@Builder
+	public Thread (String message) {
+		this.message = message;
+	}
 
 	/**
 	 * 연관관계 - Foreign Key 값을 따로 컬럼으로 정의하지 않고 연관 관계로 정의합니다.
@@ -49,6 +53,10 @@ public class Thread {
 	/**
 	 * 연관관계 편의 메소드 - 반대쪽에는 연관관계 편의 메소드가 없도록 주의합니다.
 	 */
+	public void setChannel (Channel channel) {
+		this.channel = channel;
+		channel.addThread(this);
+	}
 
 
 	/**
