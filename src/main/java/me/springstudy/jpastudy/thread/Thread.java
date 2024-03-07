@@ -8,8 +8,16 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import me.springstudy.jpastudy.channel.Channel;
 
+// lombok
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+
+// jpa
 @Entity
 @Table(name = "TB_THREAD")
 public class Thread {

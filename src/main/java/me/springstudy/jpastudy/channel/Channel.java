@@ -12,8 +12,17 @@ import jakarta.persistence.Table;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import me.springstudy.jpastudy.thread.Thread;
 
+// lombok
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+
+// jpa
 @Entity
 @Table(name = "TB_CHANNEL")
 public class Channel {
@@ -37,6 +46,12 @@ public class Channel {
 	/**
 	 * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
 	 */
+
+	@Builder
+	public Channel (String name, Type type) {
+		this.name = name;
+		this.type = type;
+	}
 
 
 	/**
