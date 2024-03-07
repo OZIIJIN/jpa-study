@@ -21,9 +21,6 @@ class UserChannelRepositoryTest {
 	@Autowired
 	private ChannelRepository channelRepository;
 
-	@Autowired
-	private UserChannelRepository userChannelRepository;
-
 	@Test
 	void userJoinChannelTest() {
 		// given
@@ -34,7 +31,6 @@ class UserChannelRepositoryTest {
 		// when
 		Channel savedChannel = channelRepository.insertChannel(newChannel);
 		User savedUser = userRepository.insertUser(newUser);
-		UserChannel savedUserChannel = userChannelRepository.insertUserChannel(newUserChannel);
 
 		// then
 		Channel foundChaneel = channelRepository.selectChannel(savedChannel.getId());

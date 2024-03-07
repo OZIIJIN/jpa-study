@@ -63,7 +63,7 @@ public class Channel {
 	@OneToMany(mappedBy = "channel", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<Thread> threads = new LinkedHashSet<>();
 
-	@OneToMany(mappedBy = "channel", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "channel", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<UserChannel> userChannels = new LinkedHashSet<>();
 
 	/**
