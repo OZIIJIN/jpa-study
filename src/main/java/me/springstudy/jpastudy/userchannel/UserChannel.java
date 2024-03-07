@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -21,15 +22,12 @@ import me.springstudy.jpastudy.user.User;
 
 // jpa
 @Entity
+@IdClass(UserChannelId.class)
 @Table(name = "TB_USERCHANNEL")
 public class UserChannel {
 	/**
 	 * 컬럼 - 연관관계 컬럼을 제외한 컬럼을 정의합니다.
 	 */
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id", nullable = false)
-	private Long id;
 
 	/**
 	 * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
@@ -43,10 +41,12 @@ public class UserChannel {
 	/**
 	 * 연관관계 - Foreign Key 값을 따로 컬럼으로 정의하지 않고 연관 관계로 정의합니다.
 	 */
+	@Id
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	User user;
 
+	@Id
 	@ManyToOne
 	@JoinColumn(name = "channel_id")
 	Channel channel;
