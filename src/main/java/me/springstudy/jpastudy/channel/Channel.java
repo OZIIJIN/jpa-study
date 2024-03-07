@@ -17,6 +17,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.springstudy.jpastudy.thread.Thread;
+import me.springstudy.jpastudy.userchannel.UserChannel;
 
 // lombok
 @Getter
@@ -59,6 +60,9 @@ public class Channel {
 	 */
 	@OneToMany(mappedBy = "channel")
 	private Set<Thread> threads = new LinkedHashSet<>();
+
+	@OneToMany(mappedBy = "channel")
+	private Set<UserChannel> userChannels = new LinkedHashSet<>();
 
 	/**
 	 * 연관관계 편의 메소드 - 반대쪽에는 연관관계 편의 메소드가 없도록 주의합니다.
