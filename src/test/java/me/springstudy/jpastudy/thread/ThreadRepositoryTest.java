@@ -2,6 +2,7 @@ package me.springstudy.jpastudy.thread;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Set;
 import me.springstudy.jpastudy.channel.Channel;
 import me.springstudy.jpastudy.channel.ChannelRepository;
 import org.junit.jupiter.api.Test;
@@ -26,16 +27,19 @@ class ThreadRepositoryTest {
 	void Thread_삽입_조회_성공() {
 		// given
 		Channel newChannel = Channel.builder().name("new-channel").build();
-		Thread newThread = Thread.builder().message("new-message").build();
-		newThread.setChannel(newChannel);
+		Thread newThread1 = Thread.builder().message("new-message").build();
+		Thread newThread2 = Thread.builder().message("new-message1").build();
+		newThread1.setChannel(newChannel);
+		newThread2.setChannel(newChannel);
 
 		// when
-		Thread savedThread = threadRepository.insertThread(newThread);
+		Thread savedThread1 = threadRepository.insertThread(newThread1);
+		Thread savedThread2 = threadRepository.insertThread(newThread2);
 		Channel savedChannel = channelRepository.insertChannel(newChannel);
 
 		// then
-		Thread foundThread = threadRepository.selectThread(savedThread.getId());
-		assert foundThread.getId().equals(savedThread.getId());
+		Channel foundChannel = channelRepository.selectChannel(savedChannel.getId());
+		assert foundChannel.getThreads().containsAll(Set.of(savedThread1, savedThread2));
 	}
 
 }
