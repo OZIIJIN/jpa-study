@@ -17,6 +17,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.springstudy.jpastudy.thread.Thread;
+import me.springstudy.jpastudy.user.User;
 import me.springstudy.jpastudy.userchannel.UserChannel;
 
 // lombok
@@ -69,6 +70,13 @@ public class Channel {
 	 */
 	public void addThread(Thread thread) {
 		this.threads.add(thread);
+	}
+
+	public UserChannel joinUser (User user) {
+		UserChannel userChannel = UserChannel.builder().user(user).channel(this).build();
+		this.userChannels.add(userChannel);
+		user.getUserChannels().add(userChannel);
+		return userChannel;
 	}
 
 	/**

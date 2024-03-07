@@ -13,6 +13,7 @@ import jakarta.persistence.Table;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.springstudy.jpastudy.userchannel.UserChannel;
@@ -39,17 +40,14 @@ public class User {
 	@Column(length = 25)
 	private String password;
 
-	@Embedded
-	@AttributeOverrides({
-		@AttributeOverride(name = "street", column = @Column(name = "home_street"))
-	}) // Address에 있는 "street" 값을 여기서는 "home_street" 로 저장하겠다.
-	private Address address;
-
-
 	/**
 	 * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
 	 */
-
+	@Builder
+	public User (String username, String password) {
+		this.username = username;
+		this.password = password;
+	}
 
 	/**
 	 * 연관관계 - Foreign Key 값을 따로 컬럼으로 정의하지 않고 연관 관계로 정의합니다.
