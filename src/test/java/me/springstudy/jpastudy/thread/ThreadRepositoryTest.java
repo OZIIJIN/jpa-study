@@ -1,14 +1,11 @@
 package me.springstudy.jpastudy.thread;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.util.Set;
 import me.springstudy.jpastudy.channel.Channel;
 import me.springstudy.jpastudy.channel.ChannelRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.stereotype.Repository;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,7 +40,7 @@ class ThreadRepositoryTest {
 	}
 
 	@Test
-	void deleteThreadWithoutOrphanRemovalTest() {
+	void deleteThreadWithOrphanRemovalTest() {
 		// given
 		Channel newChannel = Channel.builder().name("new-channel").build();
 		Thread newThread1 = Thread.builder().message("new-message").build();
