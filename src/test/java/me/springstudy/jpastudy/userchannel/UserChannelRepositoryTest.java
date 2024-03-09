@@ -75,6 +75,11 @@ class UserChannelRepositoryTest {
 		//then
 		assert users.get(0).getPassword().equals(newUser1.getPassword());
 
+		//when
+		users = userRepository.findByUsername("newUser", Sort.by("customField").descending());
+
+		//then
+		assert users.get(0).getPassword().equals(newUser2.getPassword());
 	}
 
 }
