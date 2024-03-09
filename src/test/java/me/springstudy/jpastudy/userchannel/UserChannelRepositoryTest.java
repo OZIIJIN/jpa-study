@@ -3,11 +3,13 @@ package me.springstudy.jpastudy.userchannel;
 import java.util.List;
 import me.springstudy.jpastudy.channel.Channel;
 import me.springstudy.jpastudy.channel.ChannelRepository;
+import me.springstudy.jpastudy.common.PageDTO;
 import me.springstudy.jpastudy.user.User;
 import me.springstudy.jpastudy.user.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
@@ -82,4 +84,21 @@ class UserChannelRepositoryTest {
 		assert users.get(0).getPassword().equals(newUser2.getPassword());
 	}
 
+	@Test
+	void pageDTOTest() {
+		// given
+		User newUser1 = User.builder().username("newUser").password("pass1").build();
+		User newUser2 = User.builder().username("newUser").password("pass2").build();
+		User newUser3 = User.builder().username("newUser").password("pass2").build();
+		userRepository.save(newUser1);
+		userRepository.save(newUser2);
+		userRepository.save(newUser3);
+		PageDTO pageDTO = new PageDTO(1, 2, "password");
+
+		// when
+		Page<User> page = userRepository.findAll(pageDTO.toPageable());
+
+		// then
+		assert page.getContent().size() == 2;
+	}
 }
