@@ -9,14 +9,16 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import me.springstudy.jpastudy.common.TimeStamp;
 import me.springstudy.jpastudy.thread.Thread;
 import me.springstudy.jpastudy.user.User;
 import me.springstudy.jpastudy.userchannel.UserChannel;
@@ -28,7 +30,8 @@ import me.springstudy.jpastudy.userchannel.UserChannel;
 // jpa
 @Entity
 @Table(name = "TB_CHANNEL")
-public class Channel {
+public class Channel extends TimeStamp {
+
 	/**
 	 * 컬럼 - 연관관계 컬럼을 제외한 컬럼을 정의합니다.
 	 */
@@ -51,7 +54,7 @@ public class Channel {
 	 */
 
 	@Builder
-	public Channel (String name, Type type) {
+	public Channel(String name, Type type) {
 		this.name = name;
 		this.type = type;
 	}
@@ -73,7 +76,7 @@ public class Channel {
 		this.threads.add(thread);
 	}
 
-	public UserChannel joinUser (User user) {
+	public UserChannel joinUser(User user) {
 		UserChannel userChannel = UserChannel.builder().user(user).channel(this).build();
 		this.userChannels.add(userChannel);
 		user.getUserChannels().add(userChannel);
@@ -83,4 +86,23 @@ public class Channel {
 	/**
 	 * 서비스 메소드 - 외부에서 엔티티를 수정할 메소드를 정의합니다. (단일 책임을 가지도록 주의합니다.)
 	 */
+	public void updateChannel(Channel channel) {
+		this.name = channel.getName();
+	}
+
+	/**
+	 * 라이프 사이클 메소드 - 이 entity(channel)가 라이플 사이클 중 생성되거나 수정되는 이벤트가 발생되면 실행됨
+	 */
+	@PrePersist
+	public void prePersist() {
+		super.updateCreatedAt();
+		super.updateModifiedAt();
+		super.updateCreatedBy();
+	}
+
+	@PreUpdate
+	public void PreUpdate() {
+		super.updateModifiedAt();
+		super.updateModifiedBy();
+	}
 }

@@ -9,6 +9,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import me.springstudy.jpastudy.common.TimeStamp;
 import me.springstudy.jpastudy.thread.Thread;
 import me.springstudy.jpastudy.user.User;
 
@@ -19,7 +20,7 @@ import me.springstudy.jpastudy.user.User;
 // jpa
 @Entity
 @Table(name = "TB_MENTION")
-public class Mention { // 복합키로 설정 하기
+public class Mention extends TimeStamp { // 복합키로 설정 하기
 
 	/**
 	 * 컬럼 - 연관관계 컬럼을 제외한 컬럼을 정의합니다.

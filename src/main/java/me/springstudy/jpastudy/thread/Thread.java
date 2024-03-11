@@ -17,6 +17,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.springstudy.jpastudy.channel.Channel;
+import me.springstudy.jpastudy.common.TimeStamp;
 import me.springstudy.jpastudy.mention.Mention;
 import me.springstudy.jpastudy.user.User;
 
@@ -27,7 +28,7 @@ import me.springstudy.jpastudy.user.User;
 // jpa
 @Entity
 @Table(name = "TB_THREAD")
-public class Thread {
+public class Thread extends TimeStamp {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
