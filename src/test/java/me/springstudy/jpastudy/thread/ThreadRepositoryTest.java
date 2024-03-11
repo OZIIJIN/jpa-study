@@ -30,8 +30,8 @@ class ThreadRepositoryTest {
 		newThread2.setChannel(newChannel);
 
 		// when
-		Thread savedThread1 = threadRepository.insertThread(newThread1);
-		Thread savedThread2 = threadRepository.insertThread(newThread2);
+		Thread savedThread1 = threadRepository.save(newThread1);
+		Thread savedThread2 = threadRepository.save(newThread2);
 		Channel savedChannel = channelRepository.save(newChannel);
 
 		// then
@@ -47,8 +47,8 @@ class ThreadRepositoryTest {
 		Thread newThread2 = Thread.builder().message("new-message1").build();
 		newThread1.setChannel(newChannel);
 		newThread2.setChannel(newChannel);
-		Thread savedThread1 = threadRepository.insertThread(newThread1);
-		Thread savedThread2 = threadRepository.insertThread(newThread2);
+		Thread savedThread1 = threadRepository.save(newThread1);
+		Thread savedThread2 = threadRepository.save(newThread2);
 		Channel savedChannel = channelRepository.save(newChannel);
 
 		// when
