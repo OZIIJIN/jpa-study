@@ -1,11 +1,11 @@
 package me.springstudy.jpastudy.thread;
 
 import java.util.List;
-import me.springstudy.jpastudy.user.User;
+import me.springstudy.jpastudy.channel.Channel;
 
 public interface ThreadService {
 
-	List<Thread> selectMentionedThreadList(User user);
+	List<Thread> selectNotEmptyThreadList(Channel channel);
 
 	Thread insert(Thread thread);
 

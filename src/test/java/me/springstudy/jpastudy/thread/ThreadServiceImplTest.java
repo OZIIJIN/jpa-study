@@ -1,6 +1,9 @@
 package me.springstudy.jpastudy.thread;
 
 import java.util.List;
+import me.springstudy.jpastudy.channel.Channel;
+import me.springstudy.jpastudy.channel.Channel.Type;
+import me.springstudy.jpastudy.channel.ChannelRepository;
 import me.springstudy.jpastudy.mention.Mention;
 import me.springstudy.jpastudy.user.User;
 import me.springstudy.jpastudy.user.UserRepository;
@@ -13,6 +16,9 @@ class ThreadServiceImplTest {
 
 	@Autowired
 	UserRepository userRepository;
+
+	@Autowired
+	ChannelRepository channelRepository;
 
 	@Autowired
 	ThreadService threadService;
@@ -38,6 +44,26 @@ class ThreadServiceImplTest {
 		// then
 		assert mentionedThreads.containsAll(List.of(newThread1, newThread2));
 
+	}
+
+	@Test
+	void getNotEmptyThreadList() {
+		// given
+		var newChannel = Channel.builder().name("c1").type(Type.PUBLIC).build();
+		var savedChannel = channelRepository.save(newChannel);
+		var newThread = Thread.builder().message("message").build();
+		newThread.setChannel(savedChannel);
+		threadService.insert(newThread);
+
+		var newThread2 = Thread.builder().message("").build();
+		newThread2.setChannel(savedChannel);
+		threadService.insert(newThread2);
+
+		// when
+		var notEmptyThreads = threadService.selectNotEmptyThreadList(savedChannel);
+
+		// then 메세지가 비어있는 newThread2 는 조회되지 않는다.
+		assert !notEmptyThreads.contains(newThread2);
 	}
 
 }

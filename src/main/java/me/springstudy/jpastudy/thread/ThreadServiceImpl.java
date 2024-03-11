@@ -1,10 +1,9 @@
 package me.springstudy.jpastudy.thread;
 
 import com.mysema.commons.lang.IteratorAdapter;
-import com.querydsl.core.types.Predicate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import me.springstudy.jpastudy.user.User;
+import me.springstudy.jpastudy.channel.Channel;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,11 +13,13 @@ public class ThreadServiceImpl implements ThreadService {
 	private final ThreadRepository threadRepository;
 
 	@Override
-	public List<Thread> selectMentionedThreadList(User user) {
-		// Thread가 필요함
-		QThread thread = QThread.thread;
+	public List<Thread> selectNotEmptyThreadList(Channel channel) {
+		var thread = QThread.thread;
 
-		Predicate predicate = thread.mentions.any().user.eq(user);
+		// 메세지가 비어있지 않은 해당 채널의 쓰레드 목록
+		var predicate = thread
+			.channel.eq(channel)
+			.and(thread.message.isNotEmpty());
 		var threads = threadRepository.findAll(predicate);
 
 		return IteratorAdapter.asList(threads.iterator());
@@ -28,5 +29,6 @@ public class ThreadServiceImpl implements ThreadService {
 	public Thread insert(Thread thread) {
 		return threadRepository.save(thread);
 	}
+
 
 }
