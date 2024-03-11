@@ -1,5 +1,6 @@
 package me.springstudy.jpastudy.thread;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,12 +8,16 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.springstudy.jpastudy.channel.Channel;
+import me.springstudy.jpastudy.mention.Mention;
 
 // lombok
 @Getter
@@ -38,7 +43,7 @@ public class Thread {
 	 * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
 	 */
 	@Builder
-	public Thread (String message) {
+	public Thread(String message) {
 		this.message = message;
 	}
 
@@ -49,15 +54,16 @@ public class Thread {
 	@JoinColumn(name = "channel_id")
 	private Channel channel;
 
+	@OneToMany(mappedBy = "thread", cascade = CascadeType.ALL, orphanRemoval = true)
+	Set<Mention> mentions = new LinkedHashSet<>();
 
 	/**
 	 * 연관관계 편의 메소드 - 반대쪽에는 연관관계 편의 메소드가 없도록 주의합니다.
 	 */
-	public void setChannel (Channel channel) {
+	public void setChannel(Channel channel) {
 		this.channel = channel;
 		channel.addThread(this);
 	}
-
 
 	/**
 	 * 서비스 메소드 - 외부에서 엔티티를 수정할 메소드를 정의합니다. (단일 책임을 가지도록 주의합니다.)
