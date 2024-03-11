@@ -1,6 +1,7 @@
 package me.springstudy.jpastudy.thread;
 
 import java.util.List;
+import me.springstudy.jpastudy.mention.Mention;
 import me.springstudy.jpastudy.user.User;
 import me.springstudy.jpastudy.user.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -30,12 +31,13 @@ class ThreadServiceImplTest {
 		threadService.insert(newThread2);
 
 		// when
-		var mentionedThreads = threadService.selectMentionedThreadList(saveUser);
+		//var mentionedThreads = threadService.selectMentionedThreadList(saveUser);
+		//에러남 -> 멘션이 매핑이 되어있는데 querydslpredicaateexecutor 같은 경우에는 join 연산이 불가능
+		var mentionedThreads = saveUser.getMentions().stream().map(Mention::getThread).toList();
 
 		// then
 		assert mentionedThreads.containsAll(List.of(newThread1, newThread2));
 
-		//에러남 -> 멘션이 매핑이 되어있는데 querydslpredicaateexecutor 같은 경우에는 join 연산이 불가능
 	}
 
 }
