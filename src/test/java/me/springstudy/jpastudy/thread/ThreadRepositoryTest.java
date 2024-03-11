@@ -32,11 +32,11 @@ class ThreadRepositoryTest {
 		// when
 		Thread savedThread1 = threadRepository.insertThread(newThread1);
 		Thread savedThread2 = threadRepository.insertThread(newThread2);
-		Channel savedChannel = channelRepository.insertChannel(newChannel);
+		Channel savedChannel = channelRepository.save(newChannel);
 
 		// then
-		Channel foundChannel = channelRepository.selectChannel(savedChannel.getId());
-		assert foundChannel.getThreads().containsAll(Set.of(savedThread1, savedThread2));
+		var foundChannel = channelRepository.findById(savedChannel.getId());
+		assert foundChannel.get().getThreads().containsAll(Set.of(savedThread1, savedThread2));
 	}
 
 	@Test
@@ -49,11 +49,11 @@ class ThreadRepositoryTest {
 		newThread2.setChannel(newChannel);
 		Thread savedThread1 = threadRepository.insertThread(newThread1);
 		Thread savedThread2 = threadRepository.insertThread(newThread2);
-		Channel savedChannel = channelRepository.insertChannel(newChannel);
+		Channel savedChannel = channelRepository.save(newChannel);
 
 		// when
-		Channel foundChannel = channelRepository.selectChannel(savedChannel.getId());
-		foundChannel.getThreads().remove(savedThread1);
+		var foundChannel = channelRepository.findById(savedChannel.getId());
+		foundChannel.get().getThreads().remove(savedThread1);
 
 	}
 
