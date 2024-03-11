@@ -14,7 +14,7 @@ public class ThreadServiceImpl implements ThreadService {
 	private final ThreadRepository threadRepository;
 
 	@Override
-	public List<Thread> getMentionedThreadList(User user) {
+	public List<Thread> selectMentionedThreadList(User user) {
 		// Thread가 필요함
 		QThread thread = QThread.thread;
 
@@ -22,6 +22,11 @@ public class ThreadServiceImpl implements ThreadService {
 		var threads = threadRepository.findAll(predicate);
 
 		return IteratorAdapter.asList(threads.iterator());
+	}
+
+	@Override
+	public Thread insert(Thread thread) {
+		return threadRepository.save(thread);
 	}
 
 }
