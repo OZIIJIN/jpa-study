@@ -6,6 +6,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.springstudy.jpastudy.thread.Thread;
@@ -29,6 +30,11 @@ public class Mention { // 복합키로 설정 하기
 	/**
 	 * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
 	 */
+	@Builder
+	public Mention(User user, Thread thread) {
+		this.user = user;
+		this.thread = thread;
+	}
 
 	/**
 	 * 연관관계 - Foreign Key 값을 따로 컬럼으로 정의하지 않고 연관 관계로 정의합니다.

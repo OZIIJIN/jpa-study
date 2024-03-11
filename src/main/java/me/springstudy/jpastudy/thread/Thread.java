@@ -18,6 +18,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.springstudy.jpastudy.channel.Channel;
 import me.springstudy.jpastudy.mention.Mention;
+import me.springstudy.jpastudy.user.User;
 
 // lombok
 @Getter
@@ -63,6 +64,12 @@ public class Thread {
 	public void setChannel(Channel channel) {
 		this.channel = channel;
 		channel.addThread(this);
+	}
+
+	public void addMention(User user) {
+		Mention mention = Mention.builder().user(user).thread(this).build();
+		this.mentions.add(mention);
+		user.getMentions().add(mention);
 	}
 
 	/**
