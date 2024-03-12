@@ -26,7 +26,7 @@ public class ThreadMention extends TimeStamp {
 	 * 컬럼 - 연관관계 컬럼을 제외한 컬럼을 정의합니다.
 	 */
 	@EmbeddedId
-	private ThreadMentionId mentionId;
+	private ThreadMentionId threadMentionId = new ThreadMentionId();
 
 	/**
 	 * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
@@ -35,6 +35,14 @@ public class ThreadMention extends TimeStamp {
 	public ThreadMention(User user, Thread thread) {
 		this.user = user;
 		this.thread = thread;
+		this.threadMentionId = getThreadMentionId(user, thread);
+	}
+
+	private static ThreadMentionId getThreadMentionId(User user, Thread thread) {
+		var id = new ThreadMentionId();
+		id.setUserId(user.getId());
+		id.setThreadId(thread.getId());
+		return id;
 	}
 
 	/**

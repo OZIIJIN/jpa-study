@@ -9,8 +9,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -90,19 +88,4 @@ public class Channel extends TimeStamp {
 		this.name = channel.getName();
 	}
 
-	/**
-	 * 라이프 사이클 메소드 - 이 entity(channel)가 라이플 사이클 중 생성되거나 수정되는 이벤트가 발생되면 실행됨
-	 */
-	@PrePersist
-	public void prePersist() {
-		super.updateCreatedAt();
-		super.updateModifiedAt();
-		super.updateCreatedBy();
-	}
-
-	@PreUpdate
-	public void PreUpdate() {
-		super.updateModifiedAt();
-		super.updateModifiedBy();
-	}
 }

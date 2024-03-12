@@ -8,8 +8,10 @@ import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable
 public class ThreadMentionId implements Serializable {
@@ -32,8 +34,8 @@ public class ThreadMentionId implements Serializable {
 			return false;
 		}
 		ThreadMentionId mentionId = (ThreadMentionId) o;
-		return Objects.equals(getUserId(), mentionId.getUserId()) && Objects.equals(
-			getThreadId(), mentionId.getThreadId());
+		return Objects.equals(getUserId(), mentionId.getUserId()) && Objects.equals(getThreadId(),
+			mentionId.getThreadId());
 	}
 
 	@Override
