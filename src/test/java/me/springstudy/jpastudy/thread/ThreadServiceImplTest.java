@@ -4,7 +4,6 @@ import java.util.List;
 import me.springstudy.jpastudy.channel.Channel;
 import me.springstudy.jpastudy.channel.Channel.Type;
 import me.springstudy.jpastudy.channel.ChannelRepository;
-import me.springstudy.jpastudy.mention.Mention;
 import me.springstudy.jpastudy.user.User;
 import me.springstudy.jpastudy.user.UserRepository;
 import org.junit.jupiter.api.Test;

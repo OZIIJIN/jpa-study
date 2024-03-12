@@ -8,15 +8,14 @@ import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import me.springstudy.jpastudy.userchannel.UserChannelId;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable
-public class MentionId implements Serializable {
+public class ThreadMentionId implements Serializable {
 
 	@Serial
-	private static final long serialVersionUID = 932813899396663626L;
+	private static final long serialVersionUID = 932813899396136126L;
 
 	@Column(name = "user_id")
 	private Long userId;
@@ -32,9 +31,9 @@ public class MentionId implements Serializable {
 		if (o == null || getClass() != o.getClass()) {
 			return false;
 		}
-		UserChannelId userChannelId = (UserChannelId) o;
-		return Objects.equals(getUserId(), userChannelId.getUserId()) && Objects.equals(
-			getThreadId(), userChannelId.getChannelId());
+		ThreadMentionId mentionId = (ThreadMentionId) o;
+		return Objects.equals(getUserId(), mentionId.getUserId()) && Objects.equals(
+			getThreadId(), mentionId.getThreadId());
 	}
 
 	@Override

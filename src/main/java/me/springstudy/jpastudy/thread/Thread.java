@@ -17,8 +17,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.springstudy.jpastudy.channel.Channel;
+import me.springstudy.jpastudy.comment.Comment;
 import me.springstudy.jpastudy.common.TimeStamp;
-import me.springstudy.jpastudy.mention.Mention;
+import me.springstudy.jpastudy.emotion.ThreadEmotion;
+import me.springstudy.jpastudy.mention.ThreadMention;
 import me.springstudy.jpastudy.user.User;
 
 // lombok
@@ -57,7 +59,13 @@ public class Thread extends TimeStamp {
 	private Channel channel;
 
 	@OneToMany(mappedBy = "thread", cascade = CascadeType.ALL, orphanRemoval = true)
-	Set<Mention> mentions = new LinkedHashSet<>();
+	private Set<Comment> comments = new LinkedHashSet<>();
+
+	@OneToMany(mappedBy = "thread", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<ThreadMention> mentions = new LinkedHashSet<>();
+
+	@OneToMany(mappedBy = "thread", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<ThreadEmotion> threadEmotions = new LinkedHashSet<>();
 
 	/**
 	 * 연관관계 편의 메소드 - 반대쪽에는 연관관계 편의 메소드가 없도록 주의합니다.
@@ -68,9 +76,9 @@ public class Thread extends TimeStamp {
 	}
 
 	public void addMention(User user) {
-		Mention mention = Mention.builder().user(user).thread(this).build();
+		ThreadMention mention = ThreadMention.builder().user(user).thread(this).build();
 		this.mentions.add(mention);
-		user.getMentions().add(mention);
+		user.getThreadMentions().add(mention);
 	}
 
 	/**

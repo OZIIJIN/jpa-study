@@ -9,44 +9,44 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import me.springstudy.jpastudy.comment.Comment;
 import me.springstudy.jpastudy.common.TimeStamp;
-import me.springstudy.jpastudy.thread.Thread;
 import me.springstudy.jpastudy.user.User;
 
 // lombok
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 
-// jpa
+//JPA
 @Entity
-@Table(name = "TB_MENTION")
-public class Mention extends TimeStamp { // 복합키로 설정 하기
+@Table(name = "TB_COMMENT_MENTION")
+public class CommentMention extends TimeStamp {
 
 	/**
 	 * 컬럼 - 연관관계 컬럼을 제외한 컬럼을 정의합니다.
 	 */
 	@EmbeddedId
-	private MentionId mentionId;
+	private CommentMentionId commentmentionId;
 
 	/**
 	 * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
 	 */
 	@Builder
-	public Mention(User user, Thread thread) {
+	public CommentMention(User user, Comment comment) {
 		this.user = user;
-		this.thread = thread;
+		this.comment = comment;
 	}
 
 	/**
 	 * 연관관계 - Foreign Key 값을 따로 컬럼으로 정의하지 않고 연관 관계로 정의합니다.
 	 */
 	@ManyToOne
-	@MapsId("user_id")
-	User user;
+	@MapsId("comment_id")
+	Comment comment;
 
 	@ManyToOne
-	@MapsId("thread_id")
-	Thread thread;
+	@MapsId("user_id")
+	User user;
 
 	/**
 	 * 연관관계 편의 메소드 - 반대쪽에는 연관관계 편의 메소드가 없도록 주의합니다.
@@ -55,4 +55,5 @@ public class Mention extends TimeStamp { // 복합키로 설정 하기
 	/**
 	 * 서비스 메소드 - 외부에서 엔티티를 수정할 메소드를 정의합니다. (단일 책임을 가지도록 주의합니다.)
 	 */
+
 }

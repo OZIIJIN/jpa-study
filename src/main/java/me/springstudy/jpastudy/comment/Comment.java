@@ -1,4 +1,4 @@
-package me.springstudy.jpastudy.user;
+package me.springstudy.jpastudy.comment;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -6,17 +6,18 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import me.springstudy.jpastudy.emotion.CommentEmotion;
 import me.springstudy.jpastudy.mention.CommentMention;
-import me.springstudy.jpastudy.mention.ThreadMention;
-import me.springstudy.jpastudy.userchannel.UserChannel;
+import me.springstudy.jpastudy.thread.Thread;
 
 // lombok
 @Getter
@@ -24,8 +25,8 @@ import me.springstudy.jpastudy.userchannel.UserChannel;
 
 // jpa
 @Entity
-@Table(name = "TB_USER")
-public class User {
+@Table(name = "TB_COMMENT")
+public class Comment {
 
 	/**
 	 * 컬럼 - 연관관계 컬럼을 제외한 컬럼을 정의합니다.
@@ -35,32 +36,23 @@ public class User {
 	@Column(name = "id", nullable = false)
 	private Long id;
 
-	@Column(length = 25)
-	private String username;
-
-	@Column(length = 25)
-	private String password;
-
+	private String message;
 	/**
 	 * 생성자 - 약속된 형태로만 생성가능하도록 합니다.
 	 */
-	@Builder
-	public User(String username, String password) {
-		this.username = username;
-		this.password = password;
-	}
 
 	/**
 	 * 연관관계 - Foreign Key 값을 따로 컬럼으로 정의하지 않고 연관 관계로 정의합니다.
 	 */
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-	Set<UserChannel> userChannels = new LinkedHashSet<>();
+	@ManyToOne
+	@JoinColumn(name = "thread_id")
+	private Thread thread;
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-	Set<CommentMention> commentmentions = new LinkedHashSet<>();
+	@OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<CommentMention> mentions = new LinkedHashSet<>();
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-	Set<ThreadMention> threadMentions = new LinkedHashSet<>();
+	@OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<CommentEmotion> emotions = new LinkedHashSet<>();
 
 	/**
 	 * 연관관계 편의 메소드 - 반대쪽에는 연관관계 편의 메소드가 없도록 주의합니다.
@@ -69,6 +61,5 @@ public class User {
 	/**
 	 * 서비스 메소드 - 외부에서 엔티티를 수정할 메소드를 정의합니다. (단일 책임을 가지도록 주의합니다.)
 	 */
-
 
 }
