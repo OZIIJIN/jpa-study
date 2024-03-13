@@ -58,6 +58,7 @@ public class Thread extends TimeStamp {
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
+	// FetchType = eager 인 경우, left join 을 하지 않아도 됨 → user 정보를 무조건 조회 해오기 때문에
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "channel_id")
@@ -84,6 +85,16 @@ public class Thread extends TimeStamp {
 		ThreadMention mention = ThreadMention.builder().user(user).thread(this).build();
 		this.mentions.add(mention);
 		user.getThreadMentions().add(mention);
+	}
+
+	public void addEmotion(User user, String body) {
+		ThreadEmotion emotion = ThreadEmotion.builder().user(user).thread(this).body(body).build();
+		this.threadEmotions.add(emotion);
+	}
+
+	public void addComment(Comment comment) {
+		this.comments.add(comment);
+		comment.setThread(this);
 	}
 
 	/**

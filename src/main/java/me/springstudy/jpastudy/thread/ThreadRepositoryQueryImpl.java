@@ -1,6 +1,5 @@
 package me.springstudy.jpastudy.thread;
 
-import static me.springstudy.jpastudy.channel.QChannel.channel;
 import static me.springstudy.jpastudy.thread.QThread.thread;
 
 import com.querydsl.core.types.Expression;
@@ -10,6 +9,7 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
@@ -25,8 +25,15 @@ public class ThreadRepositoryQueryImpl implements ThreadRepositoryQuery {
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize());
 
+		query.orderBy(thread.mentions.any().createdAt.desc());
+
 		var threads = query.fetch();
 		long totalSize = countQuery(cond).fetch().get(0);
+
+		threads.stream()
+			.map(Thread::getComments)
+			.forEach(comments -> comments
+				.forEach(comment -> Hibernate.initialize(comment.getEmotions())));
 
 		return PageableExecutionUtils.getPage(threads, pageable,
 			() -> totalSize); // page 객체로 감싸서 return
@@ -35,7 +42,9 @@ public class ThreadRepositoryQueryImpl implements ThreadRepositoryQuery {
 	private <T> JPAQuery<T> query(Expression<T> expr, ThreadSearchCond cond) {
 		return jpaQueryFactory.select(expr)
 			.from(thread)
-			.leftJoin(thread.channel, channel).fetchJoin()
+			.leftJoin(thread.channel).fetchJoin() // 기본 LAZY를 설정한 뒤에 필요할때만 fetch Join 을 수행한다.
+			.leftJoin(thread.threadEmotions).fetchJoin()
+			.leftJoin(thread.comments).fetchJoin()
 			.where(
 				channelIdEq(cond.getChannelId()),
 				mentionedUserIdEq(cond.getMentionedUserId())

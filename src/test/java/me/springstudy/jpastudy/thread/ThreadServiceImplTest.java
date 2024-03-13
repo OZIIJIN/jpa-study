@@ -4,6 +4,8 @@ import java.util.List;
 import me.springstudy.jpastudy.channel.Channel;
 import me.springstudy.jpastudy.channel.Channel.Type;
 import me.springstudy.jpastudy.channel.ChannelRepository;
+import me.springstudy.jpastudy.comment.Comment;
+import me.springstudy.jpastudy.comment.CommentRepository;
 import me.springstudy.jpastudy.common.PageDTO;
 import me.springstudy.jpastudy.mention.ThreadMention;
 import me.springstudy.jpastudy.user.User;
@@ -24,6 +26,9 @@ class ThreadServiceImplTest {
 
 	@Autowired
 	ThreadService threadService;
+
+	@Autowired
+	CommentRepository commentRepository;
 
 	@Test
 	void getMentionedThreadList() {
@@ -70,11 +75,16 @@ class ThreadServiceImplTest {
 	@DisplayName("전체 채널에서 내가 멘션된 쓰레드 상세정보 목록 테스트")
 	void selectMentionedThreadListTest() {
 		// given
-		var user = getTestUser();
+		var user = getTestUser("1", "1");
+		var user2 = getTestUser("2", "2");
+		var user3 = getTestUser("3", "3");
+		var user4 = getTestUser("4", "4");
 		var newChannel = Channel.builder().name("c1").type(Type.PUBLIC).build();
 		var savedChannel = channelRepository.save(newChannel);
-		var thread1 = getTestThread("message1", savedChannel, user);
-		var thread2 = getTestThread("message2", savedChannel, user);
+		var thread1 = getTestThread("message1", savedChannel, user, user2, "e1", user3, "comment",
+			user4, "commentEmotion1");
+		var thread2 = getTestThread("message2", savedChannel, user, user2, "e2", user3, "comment2",
+			user4, "commentEmotion2");
 
 		// when
 		var mentionedThreadList = threadService.selectMentionedThreadList(user.getId(),
@@ -85,9 +95,15 @@ class ThreadServiceImplTest {
 
 	}
 
-	private User getTestUser() {
-		var newUser = User.builder().username("new").password("1").build();
+	private User getTestUser(String username, String password) {
+		var newUser = User.builder().username(username).password(password).build();
 		return userRepository.save(newUser);
+	}
+
+	private Comment getTestComment(User user, String commentMessage) {
+		Comment newComment = Comment.builder().messge(commentMessage).build();
+		newComment.setUser(user);
+		return commentRepository.save(newComment);
 	}
 
 	private Thread getTestThread(String message, Channel savedChannel) {
@@ -101,4 +117,30 @@ class ThreadServiceImplTest {
 		newThread.addMention(mentionedUser);
 		return threadService.insert(newThread);
 	}
+
+	private Thread getTestThread(String message, Channel channel, User mentionedUser,
+		User emotionUser, String emotionValue) {
+		var newThread = getTestThread(message, channel, mentionedUser);
+		newThread.addEmotion(emotionUser, emotionValue);
+		return threadService.insert(newThread);
+	}
+
+	private Thread getTestThread(String message, Channel channel, User mentionedUser,
+		User emotionUser, String emotionValue, User commentUser, String commentMessage) {
+		var newThread = getTestThread(message, channel, mentionedUser, emotionUser, emotionValue);
+		newThread.addComment(getTestComment(commentUser, commentMessage));
+		return threadService.insert(newThread);
+	}
+
+	private Thread getTestThread(String message, Channel channel, User mentionedUser,
+		User emotionUser, String emotionValue, User commentUser, String commentMessage,
+		User commentEmotionUser, String commentEmotionValue) {
+		var newThread = getTestThread(message, channel, mentionedUser, emotionUser, emotionValue,
+			commentUser, commentMessage);
+		var newComment = getTestComment(commentUser, commentMessage);
+		newThread.getComments()
+			.forEach(comment -> comment.addEmotion(commentEmotionUser, commentEmotionValue));
+		return threadService.insert(newThread);
+	}
+
 }
